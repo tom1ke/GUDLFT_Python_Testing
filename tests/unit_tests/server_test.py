@@ -56,3 +56,32 @@ class TestShowSummary(TestServer):
 
         assert rv.status_code == 200
         assert b'<li>This email is not registered</li>' in rv.data
+
+
+class TestPurchasePlaces(TestServer):
+
+    def test_should_return_show_summary_page_if_booking_conditions_are_valid(self, client, monkeypatch,
+                                                                             example_club_instances,
+                                                                             example_competition_instances):
+        monkeypatch.setattr(server, 'clubs', example_club_instances)
+        monkeypatch.setattr(server, 'competitions', example_competition_instances)
+
+        rv = client.post('/purchase_places', data=dict(club='Test club 1',
+                                                       competition='Test competition 1',
+                                                       places='10'))
+
+        assert rv.status_code == 200
+        assert b'<li>Great-booking complete!</li>' in rv.data
+
+    def test_should_return_purchase_places_page_if_not_enough_club_points(self, client, monkeypatch,
+                                                                          example_club_instances,
+                                                                          example_competition_instances):
+        monkeypatch.setattr(server, 'clubs', example_club_instances)
+        monkeypatch.setattr(server, 'competitions', example_competition_instances)
+
+        rv = client.post('/purchase_places', data=dict(club='Test club 3',
+                                                       competition='Test competition 1',
+                                                       places='10'))
+
+        assert rv.status_code == 200
+        assert b'<li>You do not have enough points to book that amount</li>' in rv.data
