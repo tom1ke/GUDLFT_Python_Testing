@@ -8,8 +8,8 @@ from repositories.competitions_repo import CompetitionRepo
 app = Flask(__name__)
 app.secret_key = 'something_special'
 
-competitions = ClubRepo.load_clubs(ClubRepo.load_json())
-clubs = CompetitionRepo.load_competitions(CompetitionRepo.load_json())
+clubs = ClubRepo.load_clubs(ClubRepo.load_json())
+competitions = CompetitionRepo.load_competitions(CompetitionRepo.load_json())
 
 
 @app.route('/')
@@ -17,10 +17,13 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/showSummary',methods=['POST'])
-def showSummary():
-    club = [club for club in clubs if club['email'] == request.form['email']][0]
-    return render_template('welcome.html',club=club,competitions=competitions)
+@app.route('/show_summary', methods=['POST'])
+def show_summary():
+    for club in clubs:
+        if club.email == request.form['email']:
+            return render_template('welcome.html', club=club, competitions=competitions)
+        flash('This email is not registered')
+        return render_template('index.html')
 
 
 @app.route('/book/<competition>/<club>')
