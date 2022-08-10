@@ -98,3 +98,16 @@ class TestPurchasePlaces(TestServer):
 
         assert rv.status_code == 200
         assert b'<li>You cannot book more than 12 places</li>' in rv.data
+
+    def test_should_return_purchase_places_page_if_not_enough_places_available(self, client, monkeypatch,
+                                                                               example_club_instances,
+                                                                               example_competition_instances):
+        monkeypatch.setattr(server, 'clubs', example_club_instances)
+        monkeypatch.setattr(server, 'competitions', example_competition_instances)
+
+        rv = client.post('/purchase_places', data=dict(club='Test club 1',
+                                                       competition='Test competition 3',
+                                                       places='12'))
+
+        assert rv.status_code == 200
+        assert b'<li>Not enough places available</li>' in rv.data
