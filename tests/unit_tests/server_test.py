@@ -176,3 +176,11 @@ class TestPointsRecap(TestServer):
         assert b'<li>Test club 1 : 30</li>' in rv.data
         assert b'<li>Test club 2 : 10</li>' in rv.data
         assert b'<li>Test club 3 : 5</li>' in rv.data
+
+
+class TestLogout(TestServer):
+
+    def test_should_redirect_to_index_page(self, client):
+        rv = client.get('/logout')
+
+        assert rv.status_code == 302
