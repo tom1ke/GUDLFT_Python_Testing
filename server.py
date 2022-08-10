@@ -74,6 +74,7 @@ def purchase_places():
         flash('Not enough places available')
     else:
         competition.places = competition.places - places_required
+        club.points = club.points - places_required
         flash('Great-booking complete!')
         return render_template('welcome.html', club=club, competitions=competitions)
     return render_template('booking.html', club=club, competition=competition)
