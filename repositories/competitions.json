@@ -9,6 +9,16 @@
             "name": "Fall Classic",
             "date": "2020-10-22 13:30:00",
             "numberOfPlaces": "13"
+        },
+        {
+            "name": "Test competition 1",
+            "date": "2022-12-25 10:30:00",
+            "numberOfPlaces": "11"
+        },
+        {
+            "name": "Test competition 2",
+            "date": "2023-01-12 15:30:00",
+            "numberOfPlaces": "11"
         }
     ]
 }
