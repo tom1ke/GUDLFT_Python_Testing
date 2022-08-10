@@ -12,6 +12,7 @@
         <input type="email" name="email" id=""/>
         <button type="submit">Enter</button>
     </form>
+    <a href="{{ url_for('points_recap') }}">View points</a>
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             <ul>
