@@ -1,4 +1,5 @@
 from datetime import datetime
+from werkzeug.exceptions import NotFound
 from flask import Flask, render_template, request, redirect, flash, url_for
 
 from repositories.clubs_repo import ClubRepo
@@ -10,6 +11,8 @@ app.secret_key = 'something_special'
 
 clubs = ClubRepo.load_clubs(ClubRepo.load_json())
 competitions = CompetitionRepo.load_competitions(CompetitionRepo.load_json())
+
+NOW = datetime.now()
 
 
 @app.route('/')
@@ -27,14 +30,25 @@ def show_summary():
 
 
 @app.route('/book/<competition>/<club>')
-def book(competition,club):
-    foundClub = [c for c in clubs if c['name'] == club][0]
-    foundCompetition = [c for c in competitions if c['name'] == competition][0]
-    if foundClub and foundCompetition:
-        return render_template('booking.html',club=foundClub,competition=foundCompetition)
-    else:
-        flash("Something went wrong-please try again")
-        return render_template('welcome.html', club=club, competitions=competitions)
+def book(competition, club):
+    found_club = None
+    found_competition = None
+
+    for clb in clubs:
+        if clb.name == club:
+            found_club = clb
+
+    for cpt in competitions:
+        if cpt.name == competition:
+            found_competition = cpt
+
+    if found_club and found_competition:
+        if found_competition.date > NOW:
+            flash('You can now book places for this competition')
+            return render_template('booking.html', club=found_club, competition=found_competition)
+        flash('This competition is no longer available')
+        return render_template('welcome.html', club=found_club, competitions=competitions)
+    return NotFound()
 
 
 @app.route('/purchase_places', methods=['POST'])
