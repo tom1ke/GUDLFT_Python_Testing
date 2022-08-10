@@ -54,6 +54,8 @@ def purchase_places():
 
     if places_required > club.points:
         flash('You do not have enough points to book that amount')
+    elif places_required > 12:
+        flash('You cannot book more than 12 places')
     else:
         competition.places = competition.places - places_required
         flash('Great-booking complete!')
