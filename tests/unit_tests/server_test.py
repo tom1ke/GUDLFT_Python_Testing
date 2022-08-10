@@ -39,3 +39,20 @@ class TestIndex(TestServer):
         rv = client.get('/')
 
         assert rv.status_code == 200
+
+
+class TestShowSummary(TestServer):
+
+    def test_should_return_show_summary_page_if_registered_email(self, client, monkeypatch, example_club_instances):
+        monkeypatch.setattr(server, 'clubs', example_club_instances)
+
+        rv = client.post('/show_summary', data=dict(email='test1@email.com'))
+
+        assert rv.status_code == 200
+        assert b'<h2>Welcome, test1@email.com </h2>' in rv.data
+
+    def test_should_return_index_page_if_not_registered_email(self, client):
+        rv = client.post('/show_summary', data=dict(email='wrong@email.com'))
+
+        assert rv.status_code == 200
+        assert b'<li>This email is not registered</li>' in rv.data
