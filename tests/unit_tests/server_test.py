@@ -162,3 +162,17 @@ class TestPurchasePlaces(TestServer):
 
         assert rv.status_code == 200
         assert b'<li>Not enough places available</li>' in rv.data
+
+
+class TestPointsRecap(TestServer):
+
+    def test_should_return_points_recap_page_with_all_clubs_name_and_points(self, client, monkeypatch,
+                                                                            example_club_instances):
+        monkeypatch.setattr(server, 'clubs', example_club_instances)
+
+        rv = client.get('/points_recap')
+
+        assert rv.status_code == 200
+        assert b'<li>Test club 1 : 30</li>' in rv.data
+        assert b'<li>Test club 2 : 10</li>' in rv.data
+        assert b'<li>Test club 3 : 5</li>' in rv.data
