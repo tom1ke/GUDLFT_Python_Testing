@@ -38,7 +38,7 @@ class TestChrome(LiveServerTestCase):
         sleep(2)
 
         assert self.driver.current_url == 'http://127.0.0.1:5000/points_recap'
-        assert self.driver.find_element(By.TAG_NAME, 'li').text == 'Simply Lift : 13'
+        assert self.driver.find_element(By.ID, 'Test club').text == 'Test club : 39'
 
         # back to index page
         self.driver.find_element(By.LINK_TEXT, 'Back').click()
@@ -52,13 +52,13 @@ class TestChrome(LiveServerTestCase):
         assert self.driver.find_element(By.TAG_NAME, 'li').text == 'This email is not registered'
 
         # login with registered email
-        self.driver.find_element(By.TAG_NAME, 'input').send_keys('john@simplylift.co')
+        self.driver.find_element(By.TAG_NAME, 'input').send_keys('test@email.com')
         self.driver.find_element(By.TAG_NAME, 'button').submit()
 
         sleep(2)
 
         assert self.driver.current_url == 'http://127.0.0.1:5000/show_summary'
-        assert self.driver.find_element(By.TAG_NAME, 'h2').text == 'Welcome, john@simplylift.co'
+        assert self.driver.find_element(By.TAG_NAME, 'h2').text == 'Welcome, test@email.com'
 
         # get booking of passed competition
         self.driver.find_element(By.ID, 'Spring Festival').click()
@@ -80,7 +80,7 @@ class TestChrome(LiveServerTestCase):
 
         sleep(2)
 
-        assert self.driver.current_url == 'http://127.0.0.1:5000/book/Test%20competition%201/Simply%20Lift'
+        assert self.driver.current_url == 'http://127.0.0.1:5000/book/Test%20competition%201/Test%20club'
         assert self.driver.find_element(By.TAG_NAME, 'h2').text == 'Test competition 1'
 
         # book more than 12 places
@@ -107,7 +107,7 @@ class TestChrome(LiveServerTestCase):
 
         assert self.driver.current_url == 'http://127.0.0.1:5000/purchase_places'
         assert self.driver.find_element(By.TAG_NAME, 'li').text == 'Great-booking complete!'
-        assert self.driver.find_element(By.TAG_NAME, 'p').text == 'Points available: 8'
+        assert self.driver.find_element(By.TAG_NAME, 'p').text == 'Points available: 24'
 
         # book more places than club points available
         self.driver.find_element(By.ID, 'Test competition 2').click()
