@@ -18,7 +18,7 @@ class TestServer:
     @pytest.fixture
     def example_club_instances(self):
         return [
-            Club('Test club 1', 'test1@email.com', 30),
+            Club('Test club 1', 'test1@email.com', 40),
             Club('Test club 2', 'test2@email.com', 10),
             Club('Test club 3', 'test3@email.com', 5)
         ]
@@ -122,7 +122,7 @@ class TestPurchasePlaces(TestServer):
                                                        places='10'))
 
         assert rv.status_code == 200
-        assert b'<p>Points available: 20</p>' in rv.data
+        assert b'<p>Points available: 10</p>' in rv.data
 
     def test_should_return_purchase_places_page_if_not_enough_club_points(self, client, monkeypatch,
                                                                           example_club_instances,
@@ -173,9 +173,9 @@ class TestPointsRecap(TestServer):
         rv = client.get('/points_recap')
 
         assert rv.status_code == 200
-        assert b'<li>Test club 1 : 30</li>' in rv.data
-        assert b'<li>Test club 2 : 10</li>' in rv.data
-        assert b'<li>Test club 3 : 5</li>' in rv.data
+        assert b'<li id="Test club 1">Test club 1 : 40</li>' in rv.data
+        assert b'<li id="Test club 2">Test club 2 : 10</li>' in rv.data
+        assert b'<li id="Test club 3">Test club 3 : 5</li>' in rv.data
 
 
 class TestLogout(TestServer):
