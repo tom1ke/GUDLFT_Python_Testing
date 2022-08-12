@@ -25,8 +25,8 @@ def show_summary():
     for club in clubs:
         if club.email == request.form['email']:
             return render_template('welcome.html', club=club, competitions=competitions)
-        flash('This email is not registered')
-        return render_template('index.html')
+    flash('This email is not registered')
+    return render_template('index.html')
 
 
 @app.route('/book/<competition>/<club>')
